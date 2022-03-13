@@ -176,9 +176,6 @@ jobs:
     working_directory: /
     docker:
       - image: cimg/base:stable
-        auth:
-          username: acrservian
-          password: EFKXUInSSZ4hoEJbGWOZo+WCNM0SMSHk
     
     steps:
       - checkout
