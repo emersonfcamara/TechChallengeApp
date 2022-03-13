@@ -196,7 +196,7 @@ workflows:
       - build
       - build-image:
           requires: 
-            - deploy
+            - build
           filters:
             branches:
               only: master
