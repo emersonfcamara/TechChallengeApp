@@ -7,6 +7,7 @@ jobs:
     working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
       - image: circleci/golang:latest
+    resource_class: medium
 
     steps:
       - checkout
@@ -20,6 +21,7 @@ jobs:
     working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
       - image: circleci/golang:latest
+    resource_class: medium
 
     steps:
       - checkout
