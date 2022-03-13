@@ -174,7 +174,7 @@ jobs:
           
   build-image:
     docker:
-      - image: cimg/base:stable
+      - image: docker:17.05.0-ce-git
     
     steps:
       - checkout
@@ -187,6 +187,7 @@ jobs:
       - run:
           name: Push Image
           command: |
+            docker login --username $DOCKER_USER --password-stdin $DOCKER_PASS
             docker push acrservian.azurecr.io/techchallengeapp:latest
 
 workflows:
