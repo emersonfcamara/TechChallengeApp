@@ -201,7 +201,7 @@ workflows:
               only: master
             tags:
               ignore: /.*/
-          contexts:
+          context:
             - Servian
       - deploy:
           requires: 
