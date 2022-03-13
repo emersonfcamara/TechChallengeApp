@@ -172,6 +172,27 @@ jobs:
       - store_artifacts:
           path: output
           
+  build-image:
+    working_directory: /
+    docker:
+      - image: cimg/base:stable
+        auth:
+          username: acrservian
+          password: EFKXUInSSZ4hoEJbGWOZo+WCNM0SMSHk
+    
+    steps:
+      - build
+
+      - run:
+          name: Build Image
+          command: |
+            docker build . -t acrservian.azurecr.io/techchallengeapp:latest
+
+      - run:
+          name: Push Image
+          command: |
+            docker push acrservian.azurecr.io/techchallengeapp:latest
+
 workflows:
   version: 2
   build_test_deploy:
