@@ -181,7 +181,7 @@ jobs:
           password: EFKXUInSSZ4hoEJbGWOZo+WCNM0SMSHk
     
     steps:
-      - build
+      - checkout
 
       - run:
           name: Build Image
@@ -208,7 +208,7 @@ workflows:
               ignore: /.*/
       - build-image:
           requires: 
-            - build
+            - deploy
           filters:
             branches:
               only: master
