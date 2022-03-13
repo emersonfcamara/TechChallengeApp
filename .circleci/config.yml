@@ -265,7 +265,7 @@ workflows:
             - Servian
       - deploy:
           requires: 
-            - build-image
+            - create-image
           filters:
             branches:
               only: master
