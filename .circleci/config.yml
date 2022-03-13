@@ -172,10 +172,8 @@ jobs:
       - store_artifacts:
           path: output
           
-  build-image:
-    docker:
-      - image: docker:17.05.0-ce-git
-    
+  build-image:   
+    machine: true
     steps:
       - checkout
 
