@@ -173,7 +173,6 @@ jobs:
           path: output
           
   build-image:
-    working_directory: /
     docker:
       - image: cimg/base:stable
     
@@ -198,6 +197,7 @@ workflows:
       - deploy:
           requires: 
             - build
+            - build-image
           filters:
             branches:
               only: master
