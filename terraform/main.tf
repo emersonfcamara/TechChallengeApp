@@ -12,13 +12,12 @@ provider "azurerm" {
   # NOTE: Environment Variables can also be used for Service Principal authentication
   # Terraform also supports authenticating via the Azure CLI too.
   # see here for more info: http://terraform.io/docs/providers/azurerm/index.html
+  features {}
 
   subscription_id = $AZURE_SUB_ID
   client_id       = $AZURE_CLIENT_ID
   client_secret   = $AZURE_CLIENT_SECRET
   tenant_id       = $AZURE_TENANT_ID
-
-  features {}
 }
 
 # Create a resource group
