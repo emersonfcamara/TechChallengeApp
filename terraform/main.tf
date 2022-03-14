@@ -40,7 +40,7 @@ resource "azurerm_subnet" "database" {
   }
 }
 
-resource "azurerm_subnet" "database" {
+resource "azurerm_subnet" "aks" {
   name                 = "aks-subnet"
   resource_group_name  = azurerm_resource_group.servian.name
   virtual_network_name = azurerm_virtual_network.demo.name
