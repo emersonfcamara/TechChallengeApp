@@ -1,71 +1,57 @@
 terraform {
   required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "3.44.0"
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=2.46.0"
     }
   }
-  required_version = "> 0.14"
 }
 
-provider "aws" {
-  region = var.region
+# Configure the Microsoft Azure Provider
+provider "azurerm" {
+  features {}
 }
 
-resource "random_uuid" "randomid" {}
-
-resource "aws_iam_user" "circleci" {
-  name = var.user
-  path = "/system/"
+resource "azurerm_resource_group" "servian" {
+  name     = "rg-servian-demo"
+  location = "East US 2"
 }
 
-resource "aws_iam_access_key" "circleci" {
-  user = aws_iam_user.circleci.name
+resource "azurerm_virtual_network" "demo" {
+  name                = "demo-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.servian.location
+  resource_group_name = azurerm_resource_group.servian.name
 }
 
-data "template_file" "circleci_policy" {
-  template = file("circleci_s3_access.tpl.json")
-  vars = {
-    s3_bucket_arn = aws_s3_bucket.app.arn
+resource "azurerm_subnet" "database" {
+  name                 = "db-subnet"
+  resource_group_name  = azurerm_resource_group.servian.name
+  virtual_network_name = azurerm_virtual_network.demo.name
+  address_prefixes     = ["10.0.1.0/24"]
+
+  delegation {
+    name = "delegation"
+
+    service_delegation {
+      name    = "Microsoft.ContainerInstance/containerGroups"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+    }
   }
 }
 
-resource "local_file" "circle_credentials" {
-  filename = "tmp/circleci_credentials"
-  content  = "${aws_iam_access_key.circleci.id}\n${aws_iam_access_key.circleci.secret}"
-}
+resource "azurerm_subnet" "database" {
+  name                 = "aks-subnet"
+  resource_group_name  = azurerm_resource_group.servian.name
+  virtual_network_name = azurerm_virtual_network.demo.name
+  address_prefixes     = ["10.0.2.0/24"]
 
-resource "aws_iam_user_policy" "circleci" {
-  name   = "AllowCircleCI"
-  user   = aws_iam_user.circleci.name
-  policy = data.template_file.circleci_policy.rendered
-}
+  delegation {
+    name = "delegation"
 
-resource "aws_s3_bucket" "app" {
-  tags = {
-    Name = "App Bucket"
+    service_delegation {
+      name    = "Microsoft.ContainerInstance/containerGroups"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+    }
   }
-
-  bucket = "${var.app}.${var.label}.${random_uuid.randomid.result}"
-  acl    = "public-read"
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-  force_destroy = true
-
-}
-
-resource "aws_s3_bucket_object" "app" {
-  acl          = "public-read"
-  key          = "index.html"
-  bucket       = aws_s3_bucket.app.id
-  content      = file("./assets/index.html")
-  content_type = "text/html"
-
-}
-
-output "Endpoint" {
-  value = aws_s3_bucket.app.website_endpoint
 }
