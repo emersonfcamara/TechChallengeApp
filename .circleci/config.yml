@@ -275,6 +275,8 @@ workflows:
       - plan-apply:
           requires:
             - build
+          context:
+            - Servian
       - hold-apply:
           type: approval
           requires:
