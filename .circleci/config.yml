@@ -265,16 +265,15 @@ workflows:
             - Servian
       - deploy:
           requires: 
-            - create-image
+            - apply
           filters:
             branches:
               only: master
             tags:
               ignore: /.*/
-
-  plan_approve_apply:
-    jobs:
-      - plan-apply
+      - plan-apply:
+          requires:
+            - create-image
       - hold-apply:
           type: approval
           requires:
@@ -292,4 +291,3 @@ workflows:
       - destroy:
           requires:
             - hold-destroy
-      
