@@ -256,7 +256,7 @@ workflows:
       - build
       - create-image:
           requires: 
-            - plan-apply
+            - build
           filters:
             branches:
               only: master
@@ -274,7 +274,7 @@ workflows:
               ignore: /.*/
       - plan-apply:
           requires:
-            - build
+            - create-image
           context:
             - Servian
       - hold-apply:
@@ -284,9 +284,13 @@ workflows:
       - apply:
           requires:
             - hold-apply
+          context:
+            - Servian
       - plan-destroy:
           requires:
-            - apply
+            - deploy
+          context:
+            - Servian
       - hold-destroy:
           type: approval
           requires:
@@ -294,3 +298,5 @@ workflows:
       - destroy:
           requires:
             - hold-destroy
+          context:
+            - Servian
