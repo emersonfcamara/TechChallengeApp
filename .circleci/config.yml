@@ -192,7 +192,7 @@ jobs:
             docker push $DOCKER_REPO/techchallengeapp:latest
 
   plan-apply:
-    working_directory: /tmp/project/terraform
+    working_directory: /tmp/project
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -200,6 +200,7 @@ jobs:
       - run:
           name: terraform init & plan
           command: |
+            cd terraform
             pwd
             ls -l
             terraform init -input=false
