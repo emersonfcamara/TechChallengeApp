@@ -192,7 +192,7 @@ jobs:
             docker push $DOCKER_REPO/techchallengeapp:latest
 
   plan-apply:
-    working_directory: /terraform
+    working_directory: /tmp/project/terraform
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
