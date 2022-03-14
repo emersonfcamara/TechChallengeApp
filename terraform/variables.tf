@@ -1,27 +1,27 @@
 variable "name" {
-  type        = "string"
+  type        = string
   description = "Name of this cluster."
   default     = "akc-example"
 }
 
 variable "client_id" {
-  type        = "string"
+  type        = string
   description = "Client ID"
 }
 
 variable "client_secret" {
-  type        = "string"
+  type        = string
   description = "Client secret."
 }
 
 variable "resource_group_name" {
-  type        = "string"
+  type        = string
   description = "Name of the azure resource group."
   default     = "akc-rg"
 }
 
 variable "resource_group_location" {
-  type        = "string"
+  type        = string
   description = "Location of the azure resource group."
   default     = "eastus"
 }
