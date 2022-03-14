@@ -200,6 +200,8 @@ jobs:
       - run:
           name: terraform init & plan
           command: |
+            pwd
+            ls -l
             terraform init -input=false
             terraform plan -out tfapply -var-file variables.tfvars
       - persist_to_workspace:
