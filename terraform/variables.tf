@@ -27,19 +27,19 @@ variable "resource_group_location" {
 }
 
 variable "storage_mb" {
-  type        = integer
+  type        = number
 }
 
 variable "backup_retention_days" {
-  type        = integer
+  type        = number
 }
 
 variable "geo_redundant_backup_enabled" {
-  type        = boolean
+  type        = bool
 }
 
 variable "auto_grow_enabled" {
-  type        = boolean
+  type        = bool
 }
 
 variable "administrator_login" {
@@ -55,7 +55,7 @@ variable "version" {
 }
 
 variable "ssl_enforcement_enabled" {
-  type        = boolean
+  type        = bool
 }
 
 variable "aks_container_network_plugin" {
@@ -79,9 +79,17 @@ variable "default_node_pool_name" {
 }
 
 variable "default_node_pool_node_count" {
-  type        = integer
+  type        = number
 }
 
 variable "default_node_pool_vm_size" {
   type        = string
+}
+
+variable "address_prefixes_aks" {
+  type        = list
+}
+
+variable "address_prefixes_pgsql" {
+  type        = list
 }
