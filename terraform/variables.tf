@@ -50,7 +50,7 @@ variable "administrator_login_password" {
   type        = string
 }
 
-variable "version" {
+variable "pgsql_version" {
   type        = string
 }
 
