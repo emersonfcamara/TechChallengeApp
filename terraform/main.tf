@@ -86,7 +86,7 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
 resource "azurerm_postgresql_server" "servian" {
   name                = "${var.pgsql_database_name}"
   location            = "${azurerm_resource_group.akc-rg.location}"
-  resource_group_name = ${azurerm_resource_group.akc-rg.name}
+  resource_group_name = "${azurerm_resource_group.akc-rg.name}"
 
   sku_name = "${var.pgsql_database_sku_name}"
 
