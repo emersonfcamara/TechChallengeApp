@@ -97,6 +97,6 @@ resource "azurerm_postgresql_server" "servian" {
 
   administrator_login          = "${var.administrator_login}"
   administrator_login_password = "${var.administrator_login_password}"
-  version                      = "${var.version}"
+  version                      = "${var.pgsql_version}"
   ssl_enforcement_enabled      = "${var.ssl_enforcement_enabled}"
 }
