@@ -43,7 +43,6 @@ resource "azurerm_virtual_network" "aks_advanced_network" {
 resource "azurerm_subnet" "aks_subnet" {
   name                      = "akc-${random_integer.random_int.result}-subnet"
   resource_group_name       = "${azurerm_resource_group.akc-rg.name}"
-  network_security_group_id = "${azurerm_network_security_group.aks_advanced_network.id}"
   address_prefix            = "10.1.0.0/24"
   virtual_network_name      = "${azurerm_virtual_network.aks_advanced_network.name}"
 }
