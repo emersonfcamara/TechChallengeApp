@@ -53,6 +53,8 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
   dns_prefix = "akc-${random_integer.random_int.result}"
 
   resource_group_name = "${azurerm_resource_group.akc-rg.name}"
+  # Required for advanced networking
+  vnet_subnet_id = "${azurerm_subnet.aks_subnet.id}"
 
   default_node_pool {
     name       = "default"
@@ -60,9 +62,6 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
     vm_size    = "Standard_DS2_v2"
   }
 
-    # Required for advanced networking
-    vnet_subnet_id = "${azurerm_subnet.aks_subnet.id}"
-    
   service_principal {
     client_id     = "${var.client_id}"
     client_secret = "${var.client_secret}"
