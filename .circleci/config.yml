@@ -259,7 +259,7 @@ workflows:
       - build
       - create-image:
           requires: 
-            - build
+            - create-image
           filters:
             branches:
               only: master
@@ -277,7 +277,7 @@ workflows:
               ignore: /.*/
       - plan-apply:
           requires:
-            - create-image
+            - build
           context:
             - Servian
       - hold-apply:
