@@ -259,7 +259,7 @@ workflows:
       - build
       - create-image:
           requires: 
-            - create-image
+            - plan-apply
           filters:
             branches:
               only: master
