@@ -58,6 +58,7 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
     name       = "default"
     node_count = 2
     vm_size    = "Standard_DS2_v2"
+    
     # Required for advanced networking
     vnet_subnet_id = "${azurerm_subnet.aks_subnet.id}"
   }

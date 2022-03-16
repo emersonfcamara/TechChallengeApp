@@ -1,5 +1,5 @@
 output "subnet_id" {
-  value = "${azurerm_kubernetes_cluster.aks_container.agent_pool_profile.0.vnet_subnet_id}"
+  value = "${azurerm_kubernetes_cluster.aks_container.default_node_pool.0.vnet_subnet_id}"
 }
 
 output "network_plugin" {
