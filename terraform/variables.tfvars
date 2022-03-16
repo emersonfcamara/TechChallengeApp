@@ -24,3 +24,6 @@ aks_container_service_cidr       = "10.0.0.0/16"
 default_node_pool_name = "default"
 default_node_pool_node_count = 2
 default_node_pool_vm_size = "Standard_DS2_v2"
+
+pgsql_database_name = "postgresql-servian"
+pgsql_database_sku_name = "B_Gen5_2"

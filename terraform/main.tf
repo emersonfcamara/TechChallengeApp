@@ -43,14 +43,14 @@ resource "azurerm_virtual_network" "aks_advanced_network" {
 resource "azurerm_subnet" "aks_subnet" {
   name                      = "akc-aks-${random_integer.random_int.result}-subnet"
   resource_group_name       = "${azurerm_resource_group.akc-rg.name}"
-  address_prefixes          = [${var.address_prefixes_aks}]
+  address_prefixes          = ${var.address_prefixes_aks}
   virtual_network_name      = "${azurerm_virtual_network.aks_advanced_network.name}"
 }
 
 resource "azurerm_subnet" "postgresql_subnet" {
   name                      = "akc-db-${random_integer.random_int.result}-subnet"
   resource_group_name       = "${azurerm_resource_group.akc-rg.name}"
-  address_prefixes          = [${var.address_prefixes_pgsql}]
+  address_prefixes          = ${var.address_prefixes_pgsql}
   virtual_network_name      = "${azurerm_virtual_network.aks_advanced_network.name}"
 }
 
@@ -62,9 +62,9 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
   resource_group_name = "${azurerm_resource_group.akc-rg.name}"
 
   default_node_pool {
-    name       = ${var.default_node_pool_name}
-    node_count = ${var.default_node_pool_node_count}
-    vm_size    = ${var.default_node_pool_vm_size}
+    name       = "${var.default_node_pool_name}"
+    node_count = "${var.default_node_pool_node_count}"
+    vm_size    = "${var.default_node_pool_vm_size}"
 
     # Required for advanced networking
     vnet_subnet_id = "${azurerm_subnet.aks_subnet.id}"
@@ -76,27 +76,27 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
   }
 
   network_profile {
-    network_plugin     = ${var.aks_container_network_plugin}
-    dns_service_ip     = ${var.aks_container_dns_service_ip}
-    docker_bridge_cidr = ${var.aks_container_docker_bridge_cidr}
-    service_cidr       = ${var.aks_container_service_cidr}
+    network_plugin     = "${var.aks_container_network_plugin}"
+    dns_service_ip     = "${var.aks_container_dns_service_ip}"
+    docker_bridge_cidr = "${var.aks_container_docker_bridge_cidr}"
+    service_cidr       = "${var.aks_container_service_cidr}"
   }
 }
 
-resource "azurerm_postgresql_server" "example" {
-  name                = "postgresql-server-1"
+resource "azurerm_postgresql_server" "servian" {
+  name                = "${var.pgsql_database_name}"
   location            = ${azurerm_resource_group.akc-rg.location}
   resource_group_name = ${azurerm_resource_group.akc-rg.name}
 
-  sku_name = "B_Gen5_2"
+  sku_name = "${var.pgsql_database_sku_name}"
 
-  storage_mb                   = ${var.storage_mb}
-  backup_retention_days        = ${var.backup_retention_days}
-  geo_redundant_backup_enabled = ${var.geo_redundant_backup_enabled}
-  auto_grow_enabled            = ${var.auto_grow_enabled}
+  storage_mb                   = "${var.storage_mb}"
+  backup_retention_days        = "${var.backup_retention_days}"
+  geo_redundant_backup_enabled = "${var.geo_redundant_backup_enabled}"
+  auto_grow_enabled            = "${var.auto_grow_enabled}"
 
-  administrator_login          = ${var.administrator_login}
-  administrator_login_password = ${var.administrator_login_password}
-  version                      = ${var.version}
-  ssl_enforcement_enabled      = ${var.ssl_enforcement_enabled}
+  administrator_login          = "${var.administrator_login}"
+  administrator_login_password = "${var.administrator_login_password}"
+  version                      = "${var.version}"
+  ssl_enforcement_enabled      = "${var.ssl_enforcement_enabled}"
 }

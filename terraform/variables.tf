@@ -93,3 +93,11 @@ variable "address_prefixes_aks" {
 variable "address_prefixes_pgsql" {
   type        = list
 }
+
+variable "pgsql_database_name" {
+  type        = list
+}
+
+variable "pgsql_database_sku_name" {
+  type        = list
+}
