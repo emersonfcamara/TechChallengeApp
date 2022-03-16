@@ -25,3 +25,63 @@ variable "resource_group_location" {
   description = "Location of the azure resource group."
   default     = "eastus"
 }
+
+variable "storage_mb" {
+  type        = integer
+}
+
+variable "backup_retention_days" {
+  type        = integer
+}
+
+variable "geo_redundant_backup_enabled" {
+  type        = boolean
+}
+
+variable "auto_grow_enabled" {
+  type        = boolean
+}
+
+variable "administrator_login" {
+  type        = string
+}
+
+variable "administrator_login_password" {
+  type        = string
+}
+
+variable "version" {
+  type        = string
+}
+
+variable "ssl_enforcement_enabled" {
+  type        = boolean
+}
+
+variable "aks_container_network_plugin" {
+  type        = string
+}
+
+variable "aks_container_dns_service_ip" {
+  type        = string
+}
+
+variable "aks_container_docker_bridge_cidr" {
+  type        = string
+}
+
+variable "aks_container_service_cidr" {
+  type        = string
+}
+
+variable "default_node_pool_name" {
+  type        = string
+}
+
+variable "default_node_pool_node_count" {
+  type        = integer
+}
+
+variable "default_node_pool_vm_size" {
+  type        = string
+}
