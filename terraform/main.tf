@@ -62,8 +62,7 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
 
     # Required for advanced networking
     vnet_subnet_id = "${azurerm_subnet.aks_subnet.id}"
-  }
-
+    
   service_principal {
     client_id     = "${var.client_id}"
     client_secret = "${var.client_secret}"
