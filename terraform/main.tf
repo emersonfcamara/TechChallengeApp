@@ -43,14 +43,14 @@ resource "azurerm_virtual_network" "aks_advanced_network" {
 resource "azurerm_subnet" "aks_subnet" {
   name                      = "akc-aks-${random_integer.random_int.result}-subnet"
   resource_group_name       = "${azurerm_resource_group.akc-rg.name}"
-  address_prefixes          = ${var.address_prefixes_aks}
+  address_prefixes          = "${var.address_prefixes_aks}"
   virtual_network_name      = "${azurerm_virtual_network.aks_advanced_network.name}"
 }
 
 resource "azurerm_subnet" "postgresql_subnet" {
   name                      = "akc-db-${random_integer.random_int.result}-subnet"
   resource_group_name       = "${azurerm_resource_group.akc-rg.name}"
-  address_prefixes          = ${var.address_prefixes_pgsql}
+  address_prefixes          = "${var.address_prefixes_pgsql}"
   virtual_network_name      = "${azurerm_virtual_network.aks_advanced_network.name}"
 }
 
@@ -85,7 +85,7 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
 
 resource "azurerm_postgresql_server" "servian" {
   name                = "${var.pgsql_database_name}"
-  location            = ${azurerm_resource_group.akc-rg.location}
+  location            = "${azurerm_resource_group.akc-rg.location}"
   resource_group_name = ${azurerm_resource_group.akc-rg.name}
 
   sku_name = "${var.pgsql_database_sku_name}"
