@@ -95,9 +95,9 @@ variable "address_prefixes_pgsql" {
 }
 
 variable "pgsql_database_name" {
-  type        = list
+  type        = string
 }
 
 variable "pgsql_database_sku_name" {
-  type        = list
+  type        = string
 }
