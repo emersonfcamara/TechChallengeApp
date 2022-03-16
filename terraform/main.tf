@@ -43,7 +43,7 @@ resource "azurerm_virtual_network" "aks_advanced_network" {
 resource "azurerm_subnet" "aks_subnet" {
   name                      = "akc-${random_integer.random_int.result}-subnet"
   resource_group_name       = "${azurerm_resource_group.akc-rg.name}"
-  address_prefix            = "10.1.0.0/24"
+  address_prefixes          = ["10.1.0.0/24"]
   virtual_network_name      = "${azurerm_virtual_network.aks_advanced_network.name}"
 }
 
@@ -54,11 +54,11 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
 
   resource_group_name = "${azurerm_resource_group.akc-rg.name}"
 
-  agent_pool_profile {
-    name    = "agentpool"
-    count   = "2"
-    vm_size = "Standard_DS2_v2"
-    os_type = "Linux"
+  default_node_pool {
+    name       = "default"
+    node_count = 2
+    vm_size    = "Standard_DS2_v2"
+  }
 
     # Required for advanced networking
     vnet_subnet_id = "${azurerm_subnet.aks_subnet.id}"
