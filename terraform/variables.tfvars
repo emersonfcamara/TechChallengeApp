@@ -13,7 +13,7 @@ administrator_login_password = "H@Sh1CoR3! "
 pgsql_version = "11"
 ssl_enforcement_enabled = "false"
 address_prefixes_aks = ["10.1.0.0/16"]
-address_prefixes_pgsql = ["10.1.0.0/24"]
+address_prefixes_pgsql = ["10.2.0.0/24"]
 
 
 aks_container_network_plugin     = "azure"
