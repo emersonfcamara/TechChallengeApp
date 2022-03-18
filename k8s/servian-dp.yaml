@@ -26,8 +26,6 @@ spec:
           value: <dbpass>
         - name: VTT_DBHOST
           value: <dbhost>
-        - name: VTT_LISTENHOST
-          value: <listenhost>
         image: acrservian.azurecr.io/techchallengeapp:latest
         imagePullPolicy: IfNotPresent
         name: servian-backend-pod

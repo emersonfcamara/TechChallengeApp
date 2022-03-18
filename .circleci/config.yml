@@ -42,6 +42,7 @@ jobs:
           name: Deploy application to AKS
           command: |
             az login --service-principal --tenant $AZURE_SP_TENANT -u $AZURE_SP -p "$AZURE_SP_PASSWORD"
+            az account set --subscription $ARM_SUBSCRIPTION_ID
             az aks get-credentials --name $AZURE_AKS_NAME --resource-group $AZURE_RG_NAME
             cd terraform
             kubectl apply servian-dp.yaml
@@ -95,15 +96,10 @@ jobs:
           command: |
             cd terraform
             terraform apply -auto-approve tfapply
-            # terraform output pgsql_administrator_login
-            # terraform output pgsql_administrator_login_password
-            # terraform output pgsql_name
-            # terraform output pgsql_location
             cp ../k8s/*.yaml .
-            sed -i 's/<dbuser>/'"$(terraform output pgsql_administrator_login)"'/g' servian-dp.yaml
-            sed -i 's/<dbpass>/'"$(terraform output pgsql_administrator_login_password)"'/g' servian-dp.yaml
-            sed -i 's/<dbhost>/'"$(terraform output pgsql_name)"'.postgres.database.azure.com/g' servian-dp.yaml
-            sed -i 's/<listenhost>/'"$(terraform output pgsql_location)"'/g' servian-dp.yaml
+            sed -i 's/<dbuser>/'"$(terraform output --raw pgsql_administrator_login)"'/g' servian-dp.yaml
+            sed -i 's/<dbpass>/'"$(terraform output --raw pgsql_administrator_login_password)"'/g' servian-dp.yaml
+            sed -i 's/<dbhost>/'"$(terraform output --raw pgsql_name)"'.postgres.database.azure.com/g' servian-dp.yaml
             cat servian-dp.yaml
       - persist_to_workspace:
           root: .
