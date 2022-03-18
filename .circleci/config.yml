@@ -71,7 +71,7 @@ jobs:
           name: Push Image
           command: |
             echo "$DOCKER_PASS" | docker login $DOCKER_REPO --username $DOCKER_USER --password-stdin
-            docker push $DOCKER_REPO/techchallengeapp:latest
+            docker push $(echo $DOCKER_REPO)/techchallengeapp:latest
 
       - persist_to_workspace:
           root: .
