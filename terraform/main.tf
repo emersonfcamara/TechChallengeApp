@@ -114,5 +114,12 @@ resource "azurerm_postgresql_server" "servian" {
   administrator_login_password = "${var.administrator_login_password}"
   version                      = "${var.pgsql_version}"
   ssl_enforcement_enabled      = "${var.ssl_enforcement_enabled}"
-  allow_access_to_azure_services = "${var.allow_access_to_azure_services}"
+}
+
+resource "azurerm_postgresql_firewall_rule" "azure_resource_access" {
+  name                = "azure-pgsql-access"
+  resource_group_name = "${azurerm_resource_group.akc-rg.name}"
+  server_name         = azurerm_postgresql_server.servian.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
 }
