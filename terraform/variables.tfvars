@@ -1,4 +1,4 @@
-name      = "aks-servian"
+aks-name      = "aks-servian"
 resource_group_name = "rg-servian"
 resource_group_location = "eastus2"
 client_id = "e75e800b-30d1-46aa-ac7b-dbca97cde196"

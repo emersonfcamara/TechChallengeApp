@@ -1,4 +1,4 @@
-variable "name" {
+variable "aks-name" {
   type        = string
   description = "Name of this cluster."
   default     = "akc-example"

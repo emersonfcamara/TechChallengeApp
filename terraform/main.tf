@@ -55,7 +55,7 @@ resource "azurerm_subnet" "postgresql_subnet" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks_container" {
-  name       = "akc-${random_integer.random_int.result}"
+  name       = "${var.aks-name}"
   location   = "${var.resource_group_location}"
   dns_prefix = "akc-${random_integer.random_int.result}"
 
