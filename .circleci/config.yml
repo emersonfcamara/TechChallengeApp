@@ -232,10 +232,10 @@ jobs:
             cd terraform
             terraform apply -auto-approve tfapply
             cd ../k8s
-            terraform output pgsql_administrator_login
-            terraform output pgsql_administrator_login_password
-            terraform output pgsql_name
-            terraform output pgsql_location
+            terraform output pgsql_administrator_login tfapply
+            terraform output pgsql_administrator_login_password tfapply
+            terraform output pgsql_name tfapply
+            terraform output pgsql_location tfapply
             # sed -i 's/<dbuser>/'"$(terraform output pgsql_administrator_login)"'/g' servian-dp.yaml
             # sed -i 's/<dbpass>/'"$(terraform output pgsql_administrator_login_password)"'/g' servian-dp.yaml
             # sed -i 's/<dbhost>/'"$(terraform output pgsql_name)"'.postgres.database.azure.com/g' servian-dp.yaml
