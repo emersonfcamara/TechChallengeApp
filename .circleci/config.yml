@@ -45,7 +45,9 @@ jobs:
             az account set --subscription $ARM_SUBSCRIPTION_ID
             az aks get-credentials --name $AZURE_AKS_NAME --resource-group $AZURE_RG_NAME
             cd terraform
-            kubectl apply servian-dp.yaml
+            kubectl apply -f servian-dp.yaml
+            kubectl apply -f servian-sv.yaml
+            kubectl apply -f servian-ing.yaml
             
       - persist_to_workspace:
           root: .
