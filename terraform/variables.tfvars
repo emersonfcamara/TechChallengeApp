@@ -21,7 +21,7 @@ aks_container_dns_service_ip     = "10.0.0.10"
 aks_container_docker_bridge_cidr = "172.17.0.1/16"
 aks_container_service_cidr       = "10.0.0.0/16"
 
-aks_acr_name = "servian-acr"
+aks_acr_name = "servianacr"
 
 default_node_pool_name = "default"
 default_node_pool_node_count = 2
