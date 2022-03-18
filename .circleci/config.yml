@@ -70,6 +70,11 @@ jobs:
             echo "$DOCKER_PASS" | docker login $DOCKER_REPO --username $DOCKER_USER --password-stdin
             docker push $DOCKER_REPO/techchallengeapp:latest
 
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
   terraform-plan-apply:
     working_directory: /tmp/project
     docker:
