@@ -65,7 +65,7 @@ jobs:
       - run:
           name: Build Image
           command: |
-            docker build . -t $DOCKER_REPO.azurecr.io/techchallengeapp:latest
+            docker build . -t $(echo $DOCKER_REPO)/techchallengeapp:latest
 
       - run:
           name: Push Image
