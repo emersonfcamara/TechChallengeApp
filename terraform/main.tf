@@ -84,7 +84,7 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${var.aks_acr_name}"
+  name                = "${var.aks_acr_name}${random_integer.random_int.result}"
   resource_group_name = "${azurerm_resource_group.akc-rg.name}"
   location            = "${var.resource_group_location}"
   sku                 = "Standard"
