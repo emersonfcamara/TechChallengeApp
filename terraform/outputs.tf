@@ -28,7 +28,7 @@ output "pgsql_administrator_login" {
 
 output "pgsql_administrator_login_password" {
   value = "${azurerm_postgresql_server.servian.administrator_login_password}"
-  sensitive: true
+  sensitive = true
 }
 
 output "pgsql_name" {
