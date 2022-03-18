@@ -219,6 +219,12 @@ jobs:
           command: |
             cd terraform
             terraform apply -auto-approve tfapply
+            cd ../k8s
+            sed -i 's/<dbuser>/'"$(terraform output pgsql_administrator_login)"'/g' servian-dp.yaml
+            sed -i 's/<dbpass>/'"$(terraform output pgsql_administrator_login_password)"'/g' servian-dp.yaml
+            sed -i 's/<dbhost>/'"$(terraform output pgsql_name)"'/g' servian-dp.yaml
+            sed -i 's/<listenhost>/'"$(terraform output pgsql_location)"'/g' servian-dp.yaml
+            cat servian-dp.yaml
       - persist_to_workspace:
           root: .
           paths:
