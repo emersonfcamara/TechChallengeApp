@@ -26,7 +26,9 @@ spec:
           value: <dbpass>
         - name: VTT_DBHOST
           value: <dbhost>
-        image: <reponame>.azurecr.io/techchallengeapp:latest
+        image: <reponame>/techchallengeapp:latest
+        command:
+        - updatedb
         imagePullPolicy: IfNotPresent
         name: servian-backend-pod
         ports:
