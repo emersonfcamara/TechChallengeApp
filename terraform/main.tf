@@ -83,6 +83,21 @@ resource "azurerm_kubernetes_cluster" "aks_container" {
   }
 }
 
+resource "azurerm_container_registry" "acr" {
+  name                = "${var.aks_acr_name}"
+  resource_group_name = "${azurerm_resource_group.akc-rg.name}"
+  location            = "${var.resource_group_location}"
+  sku                 = "Standard"
+  admin_enabled       = true
+}
+
+# add the role to the identity the kubernetes cluster was assigned
+resource "azurerm_role_assignment" "aks_container_to_acr" {
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = "${var.client_id}"
+}
+
 resource "azurerm_postgresql_server" "servian" {
   name                = "${var.pgsql_database_name}"
   location            = "${azurerm_resource_group.akc-rg.location}"
@@ -99,4 +114,5 @@ resource "azurerm_postgresql_server" "servian" {
   administrator_login_password = "${var.administrator_login_password}"
   version                      = "${var.pgsql_version}"
   ssl_enforcement_enabled      = "${var.ssl_enforcement_enabled}"
+  allow_access_to_azure_services = "${var.allow_access_to_azure_services}"
 }

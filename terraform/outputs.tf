@@ -38,3 +38,7 @@ output "pgsql_name" {
 output "pgsql_location" {
   value = "${azurerm_postgresql_server.servian.location}"
 }
+
+output "acr_name" {
+  value = "${azurerm_container_registry.acr.name}"
+}

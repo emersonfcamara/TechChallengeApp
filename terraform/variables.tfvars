@@ -12,14 +12,16 @@ administrator_login = "psqladminuser"
 administrator_login_password = "H@Sh1CoR3! "
 pgsql_version = "11"
 ssl_enforcement_enabled = "false"
+allow_access_to_azure_services = "true"
 address_prefixes_aks = ["10.1.0.0/24"]
 address_prefixes_pgsql = ["10.1.1.0/24"]
-
 
 aks_container_network_plugin     = "azure"
 aks_container_dns_service_ip     = "10.0.0.10"
 aks_container_docker_bridge_cidr = "172.17.0.1/16"
 aks_container_service_cidr       = "10.0.0.0/16"
+
+aks_acr_name = "servian-acr"
 
 default_node_pool_name = "default"
 default_node_pool_node_count = 2

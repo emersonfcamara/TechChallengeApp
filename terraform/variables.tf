@@ -58,6 +58,10 @@ variable "ssl_enforcement_enabled" {
   type        = bool
 }
 
+variable "allow_access_to_azure_services" {
+  type        = bool
+}
+
 variable "aks_container_network_plugin" {
   type        = string
 }
@@ -99,5 +103,9 @@ variable "pgsql_database_name" {
 }
 
 variable "pgsql_database_sku_name" {
+  type        = string
+}
+
+variable "aks_acr_name" {
   type        = string
 }
