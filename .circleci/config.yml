@@ -18,8 +18,8 @@ jobs:
       - run: go test -v -race -cover ./...
 
   deploy:
-    machine:
-      - image: ubuntu-2004:current   
+    docker:
+      - image: ubuntu-2004:current
     steps:
       - checkout
       - run:
