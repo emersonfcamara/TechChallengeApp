@@ -110,7 +110,7 @@ jobs:
             sed -i 's/<dbuser>/'"$(terraform output --raw pgsql_administrator_login)"'/g' servian-dp.yaml
             sed -i 's/<dbpass>/'"$(terraform output --raw pgsql_administrator_login_password)"'/g' servian-dp.yaml
             sed -i 's/<dbhost>/'"$(terraform output --raw pgsql_name)"'.postgres.database.azure.com/g' servian-dp.yaml
-            sed -i 's/<containerimage>/$DOCKER_REPO.azurecr.io/techchallengeapp:latest/g' servian-dp.yaml
+            sed -i 's/<reponame>/'"$DOCKER_REPO"'/g' servian-dp.yaml
             cat servian-dp.yaml
       - persist_to_workspace:
           root: .
