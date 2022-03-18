@@ -22,6 +22,8 @@ jobs:
     resource_class: medium
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install Az-Cli
           command: |
@@ -41,6 +43,7 @@ jobs:
       - run:
           name: Deploy application to AKS
           command: |
+            ls -l
             az login --service-principal --tenant $AZURE_SP_TENANT -u $AZURE_SP -p "$AZURE_SP_PASSWORD"
             az account set --subscription $ARM_SUBSCRIPTION_ID
             az aks get-credentials --name $AZURE_AKS_NAME --resource-group $AZURE_RG_NAME
