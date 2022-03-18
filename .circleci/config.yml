@@ -19,22 +19,33 @@ jobs:
 
   deploy:
     machine: true
+    resource_class: medium
     steps:
       - checkout
       - run:
+          name: Install Az-Cli
           command: |
             sudo apt-get update
             sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
             curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
             AZ_REPO=$(lsb_release -cs) && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
             sudo apt-get update && sudo apt-get install azure-cli
+
+      - run:
+          name: Install Kubectl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+
+      - run:
+          name: Deploy application to AKS
+          command: |
             az login --service-principal --tenant $AZURE_SP_TENANT -u $AZURE_SP -p "$AZURE_SP_PASSWORD"
-            kubectl
             az aks get-credentials --name $AZURE_AKS_NAME --resource-group $AZURE_RG_NAME
             cd terraform
             kubectl apply servian-dp.yaml
-
-          name: Deploy the servian backend app on AKS
+            
       - persist_to_workspace:
           root: .
           paths:
