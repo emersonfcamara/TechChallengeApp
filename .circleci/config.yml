@@ -29,6 +29,7 @@ jobs:
             AZ_REPO=$(lsb_release -cs) && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
             sudo apt-get update && sudo apt-get install azure-cli
             az login --service-principal --tenant $AZURE_SP_TENANT -u $AZURE_SP -p "$AZURE_SP_PASSWORD"
+            kubectl
             az aks get-credentials --name $AZURE_AKS_NAME --resource-group $AZURE_RG_NAME
             cd terraform
             kubectl apply servian-dp.yaml
