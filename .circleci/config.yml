@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
-  build:
+  application-build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
       - image: circleci/golang:latest
@@ -17,7 +17,7 @@ jobs:
       - run: go build -v
       - run: go test -v -race -cover ./...
 
-  deploy:
+  application-deploy:
     machine: true
     resource_class: medium
     steps:
@@ -50,7 +50,7 @@ jobs:
           root: .
           paths:
             - .
-  create-image:   
+  application-create-image:   
     machine: true
     resource_class: medium
     steps:
@@ -67,7 +67,7 @@ jobs:
             echo "$DOCKER_PASS" | docker login $DOCKER_REPO --username $DOCKER_USER --password-stdin
             docker push $DOCKER_REPO/techchallengeapp:latest
 
-  plan-apply:
+  terraform-plan-apply:
     working_directory: /tmp/project
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
@@ -84,7 +84,7 @@ jobs:
           paths:
             - .
 
-  apply:
+  terraform-apply:
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -110,7 +110,7 @@ jobs:
           paths:
             - .
 
-  plan-destroy:
+  terraform-plan-destroy:
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -126,7 +126,7 @@ jobs:
           paths:
             - .
 
-  destroy:
+  terraform-destroy:
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -142,10 +142,24 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - build
-      - create-image:
+      - application-build
+      - terraform-plan-apply:
+          requires:
+            - application-build
+          context:
+            - Servian
+      - terraform-hold-apply:
+          type: approval
+          requires:
+            - terraform-plan-apply
+      - terraform-apply:
+          requires:
+            - terraform-hold-apply
+          context:
+            - Servian
+      - application-create-image:
           requires: 
-            - plan-apply
+            - terraform-apply
           filters:
             branches:
               only: master
@@ -153,9 +167,9 @@ workflows:
               ignore: /.*/
           context:
             - Servian
-      - deploy:
+      - application-deploy:
           requires: 
-            - build
+            - application-create-image
           context:
             - Servian
           filters:
@@ -163,31 +177,17 @@ workflows:
               only: master
             tags:
               ignore: /.*/
-      - plan-apply:
+      - terraform-plan-destroy:
           requires:
-            - deploy
+            - application-deploy
           context:
             - Servian
-      - hold-apply:
+      - terraform-hold-destroy:
           type: approval
           requires:
-            - plan-apply
-      - apply:
+            - terraform-plan-destroy
+      - terraform-destroy:
           requires:
-            - hold-apply
-          context:
-            - Servian
-      - plan-destroy:
-          requires:
-            - deploy
-          context:
-            - Servian
-      - hold-destroy:
-          type: approval
-          requires:
-            - plan-destroy
-      - destroy:
-          requires:
-            - hold-destroy
+            - terraform-hold-destroy
           context:
             - Servian
