@@ -17,162 +17,174 @@ jobs:
       - run: go build -v
       - run: go test -v -race -cover ./...
 
-  deploy:
-    working_directory: /go/src/github.com/servian/TechChallengeApp
-    docker:
-      - image: circleci/golang:latest
+  deploy:   
+    machine: true
     resource_class: medium
-
     steps:
       - checkout
 
       - run:
-          name: Setup
+          name: Deploy to AKS
           command: |
-            go get -v -t -d ./...
-            go get github.com/GeertJohan/go.rice/rice
-            mkdir output
-            go build -ldflags="-s -w" -a -v -o TechChallengeApp .
-            ls
-            ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
+            docker ps
+    
+
+  # deploy:
+  #   working_directory: /go/src/github.com/servian/TechChallengeApp
+  #   docker:
+  #     - image: circleci/golang:latest
+  #   resource_class: medium
+
+  #   steps:
+  #     - checkout
+
+  #     - run:
+  #         name: Setup
+  #         command: |
+  #           go get -v -t -d ./...
+  #           go get github.com/GeertJohan/go.rice/rice
+  #           mkdir output
+  #           go build -ldflags="-s -w" -a -v -o TechChallengeApp .
+  #           ls
+  #           ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
 
 
-      - run: 
-          name: Build for linux
-          environment:
-            GOOS: linux
-            GOARCH: amd64
-          command: |
-            if [ -d "dist" ]; then
-              rm -rf dist
-            fi
+  #     - run: 
+  #         name: Build for linux
+  #         environment:
+  #           GOOS: linux
+  #           GOARCH: amd64
+  #         command: |
+  #           if [ -d "dist" ]; then
+  #             rm -rf dist
+  #           fi
             
-            mkdir -p dist
+  #           mkdir -p dist
             
-            go build -ldflags="-s -w" -a -v -o TechChallengeApp .
+  #           go build -ldflags="-s -w" -a -v -o TechChallengeApp .
 
-            pushd ui
-            rice append --exec ../TechChallengeApp
-            popd
+  #           pushd ui
+  #           rice append --exec ../TechChallengeApp
+  #           popd
 
-            cp TechChallengeApp dist/
-            cp conf.toml dist/
+  #           cp TechChallengeApp dist/
+  #           cp conf.toml dist/
             
-            rm TechChallengeApp
+  #           rm TechChallengeApp
 
-            export version=$(cat versionfile)
+  #           export version=$(cat versionfile)
             
-            zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
+  #           zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
 
-      # build for macos
-      - run: 
-          name: Build for macOS
-          environment:
-            GOOS: darwin
-            GOARCH: amd64
-          command: |
-            if [ -d "dist" ]; then
-              rm -rf dist
-            fi
+  #     # build for macos
+  #     - run: 
+  #         name: Build for macOS
+  #         environment:
+  #           GOOS: darwin
+  #           GOARCH: amd64
+  #         command: |
+  #           if [ -d "dist" ]; then
+  #             rm -rf dist
+  #           fi
             
-            mkdir -p dist
+  #           mkdir -p dist
             
-            go build -ldflags="-s -w" -a -v -o TechChallengeApp .
+  #           go build -ldflags="-s -w" -a -v -o TechChallengeApp .
 
-            pushd ui
-            rice append --exec ../TechChallengeApp
-            popd
+  #           pushd ui
+  #           rice append --exec ../TechChallengeApp
+  #           popd
 
-            cp TechChallengeApp dist/
-            cp conf.toml dist/
+  #           cp TechChallengeApp dist/
+  #           cp conf.toml dist/
 
-            rm TechChallengeApp
+  #           rm TechChallengeApp
 
-            export version=$(cat versionfile)
+  #           export version=$(cat versionfile)
 
-            zip -r "output/TechChallengeApp_${version}_darwin.zip" dist/*
+  #           zip -r "output/TechChallengeApp_${version}_darwin.zip" dist/*
 
-      # build windows 64 bit
-      - run: 
-          name: Build Windows 64bit
-          environment:
-            GOOS: windows
-            GOARCH: amd64
-          command: | 
-            # cross compile to windows in linux requires a few extra bits
-            # this gets around permission issues
-            sudo chmod -R 0777 /usr/local/go/
-            go get github.com/inconshreveable/mousetrap
-            if [ -d "dist" ]; then
-              rm -rf dist
-            fi
+  #     # build windows 64 bit
+  #     - run: 
+  #         name: Build Windows 64bit
+  #         environment:
+  #           GOOS: windows
+  #           GOARCH: amd64
+  #         command: | 
+  #           # cross compile to windows in linux requires a few extra bits
+  #           # this gets around permission issues
+  #           sudo chmod -R 0777 /usr/local/go/
+  #           go get github.com/inconshreveable/mousetrap
+  #           if [ -d "dist" ]; then
+  #             rm -rf dist
+  #           fi
             
-            mkdir -p dist
+  #           mkdir -p dist
             
-            go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
+  #           go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
 
-            pushd ui
-            rice append --exec ../TechChallengeApp.exe
-            popd
+  #           pushd ui
+  #           rice append --exec ../TechChallengeApp.exe
+  #           popd
 
-            cp TechChallengeApp.exe dist/
-            cp conf.toml dist/
+  #           cp TechChallengeApp.exe dist/
+  #           cp conf.toml dist/
 
-            rm TechChallengeApp.exe
+  #           rm TechChallengeApp.exe
 
-            export version=$(cat versionfile)
+  #           export version=$(cat versionfile)
 
-            zip -r "output/TechChallengeApp_${version}_win64.zip" dist/*
+  #           zip -r "output/TechChallengeApp_${version}_win64.zip" dist/*
 
-      #build windows 32 bit
-      - run: 
-          name: Build Windows 32bit
-          environment:
-            GOOS: windows
-            GOARCH: 386
-          command: |
-            if [ -d "dist" ]; then
-              rm -rf dist
-            fi
+  #     #build windows 32 bit
+  #     - run: 
+  #         name: Build Windows 32bit
+  #         environment:
+  #           GOOS: windows
+  #           GOARCH: 386
+  #         command: |
+  #           if [ -d "dist" ]; then
+  #             rm -rf dist
+  #           fi
             
-            mkdir -p dist
+  #           mkdir -p dist
             
-            go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
+  #           go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
 
-            pushd ui
-            rice append --exec ../TechChallengeApp.exe
-            popd
+  #           pushd ui
+  #           rice append --exec ../TechChallengeApp.exe
+  #           popd
 
-            cp TechChallengeApp.exe dist/
-            cp conf.toml dist/
+  #           cp TechChallengeApp.exe dist/
+  #           cp conf.toml dist/
 
-            rm TechChallengeApp.exe
+  #           rm TechChallengeApp.exe
 
-            export version=$(cat versionfile)
+  #           export version=$(cat versionfile)
 
-            zip -r "output/TechChallengeApp_${version}_win32.zip" dist/*
+  #           zip -r "output/TechChallengeApp_${version}_win32.zip" dist/*
 
-      - run:
-          name: Release if new version
-          command: |
-            export version=$(cat versionfile)
-            echo $version
-            export tagvalue=$(git tag | grep ${version})
-            export prerelease=$(echo ${version} | grep 'pre-release')
-            if [ -z "${tagvalue}" ]; then
-              go get github.com/tcnksm/ghr
+  #     - run:
+  #         name: Release if new version
+  #         command: |
+  #           export version=$(cat versionfile)
+  #           echo $version
+  #           export tagvalue=$(git tag | grep ${version})
+  #           export prerelease=$(echo ${version} | grep 'pre-release')
+  #           if [ -z "${tagvalue}" ]; then
+  #             go get github.com/tcnksm/ghr
 
-              if [ -z "${prerelease}" ]; then
-                echo "No pre-release in version, creating release"
-                ghr -u servian ${version} output
-              else
-                echo "Found pre-release in version, creating pre-release"
-                ghr -u servian -prerelease ${version} output
-              fi
-            fi
+  #             if [ -z "${prerelease}" ]; then
+  #               echo "No pre-release in version, creating release"
+  #               ghr -u servian ${version} output
+  #             else
+  #               echo "Found pre-release in version, creating pre-release"
+  #               ghr -u servian -prerelease ${version} output
+  #             fi
+  #           fi
 
-      - store_artifacts:
-          path: output
+  #     - store_artifacts:
+  #         path: output
           
   create-image:   
     machine: true
@@ -220,10 +232,14 @@ jobs:
             cd terraform
             terraform apply -auto-approve tfapply
             cd ../k8s
-            sed -i 's/<dbuser>/'"$(terraform output pgsql_administrator_login)"'/g' servian-dp.yaml
-            sed -i 's/<dbpass>/'"$(terraform output pgsql_administrator_login_password)"'/g' servian-dp.yaml
-            sed -i 's/<dbhost>/'"$(terraform output pgsql_name)"'/g' servian-dp.yaml
-            sed -i 's/<listenhost>/'"$(terraform output pgsql_location)"'/g' servian-dp.yaml
+            terraform output pgsql_administrator_login
+            terraform output pgsql_administrator_login_password
+            terraform output pgsql_name
+            terraform output pgsql_location
+            # sed -i 's/<dbuser>/'"$(terraform output pgsql_administrator_login)"'/g' servian-dp.yaml
+            # sed -i 's/<dbpass>/'"$(terraform output pgsql_administrator_login_password)"'/g' servian-dp.yaml
+            # sed -i 's/<dbhost>/'"$(terraform output pgsql_name)"'.postgres.database.azure.com/g' servian-dp.yaml
+            # sed -i 's/<listenhost>/'"$(terraform output pgsql_location)"'/g' servian-dp.yaml
             cat servian-dp.yaml
       - persist_to_workspace:
           root: .
