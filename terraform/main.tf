@@ -91,13 +91,6 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = true
 }
 
-# add the role to the identity the kubernetes cluster was assigned
-resource "azurerm_role_assignment" "aks_container_to_acr" {
-  scope                = azurerm_container_registry.acr.id
-  role_definition_name = "AcrPull"
-  principal_id         = "${var.client_id}"
-}
-
 resource "azurerm_postgresql_server" "servian" {
   name                = "${var.pgsql_database_name}"
   location            = "${azurerm_resource_group.akc-rg.location}"
