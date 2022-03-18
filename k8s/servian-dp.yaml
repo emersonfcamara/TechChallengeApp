@@ -28,7 +28,7 @@ spec:
           value: <dbhost>
         - name: VTT_LISTENHOST
           value: <listenhost>
-        image: <containerimage>
+        image: acrservian.azurecr.io/techchallengeapp:latest
         imagePullPolicy: IfNotPresent
         name: servian-backend-pod
         ports:

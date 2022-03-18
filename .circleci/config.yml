@@ -1,7 +1,9 @@
 # Golang CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
-version: 2
+version: 2.1
+orbs:
+  azure-cli: circleci/azure-cli@1.0.0
 jobs:
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -18,15 +20,16 @@ jobs:
       - run: go test -v -race -cover ./...
 
   deploy:   
-    machine: true
-    resource_class: medium
+    executor: azure-cli/azure-docker
     steps:
-      - checkout
-
+      - azure-cli/login-with-service-principal
       - run:
-          name: Deploy to AKS
           command: |
-            docker ps
+            export AZURE_SP=$ARM_CLIENT_ID
+            export AZURE_SP_PASSWORD=$ARM_CLIENT_SECRET
+            export AZURE_SP_TENANT=$ARM_TENANT_ID
+            az resource list
+          name: List resources of tenant stored as `AZURE_SP_TENANT` env var
     
 
   # deploy:
@@ -292,6 +295,8 @@ workflows:
       - deploy:
           requires: 
             - apply
+          context:
+            - Servian
           filters:
             branches:
               only: master
